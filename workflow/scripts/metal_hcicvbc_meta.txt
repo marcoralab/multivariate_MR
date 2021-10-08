@@ -1,0 +1,54 @@
+
+## Remove commented lines from summary statistics prior to metal
+zcat Haworth2019hc.chrall.CPRA_b37.tsv.gz | sed '/^[[:blank:]]*#/d;s/#.*//' > Haworth2019hc.txt
+zcat Adams2016icv.chrall.CPRA_b37.tsv.gz | sed '/^[[:blank:]]*#/d;s/#.*//' > Adams2016icv.txt
+zcat Elliott2018bv009.chrall.CPRA_b37.tsv.gz | sed '/^[[:blank:]]*#/d;s/#.*//' > Elliott2018bv009.txt
+
+## METAL 2018
+/sc/orga/projects/LOAD/shea/Projects/mvmr_hight_ICV_AD/METAL/build/bin/metal
+
+AVERAGEFREQ ON
+MINMAXFREQ ON
+TRACKPOSITIONS ON
+
+SEPARATOR  TAB
+MARKER   DBSNP_ID
+WEIGHT   N
+ALLELE   ALT REF
+FREQ     AF
+EFFECT   BETA
+STDERR   SE
+PVAL     P
+CHROMOSOMELABEL CHROM
+POSITIONLABEL POS
+
+PROCESS data/GWAS/Adams2016icv.txt
+
+SEPARATOR  TAB
+MARKER   DBSNP_ID
+WEIGHT   N
+ALLELE   ALT REF
+FREQ     AF
+EFFECT   BETA
+STDERR   SE
+PVAL     P
+CHROMOSOMELABEL CHROM
+POSITIONLABEL POS
+
+PROCESS data/GWAS/Haworth2019hc.txt
+
+SEPARATOR  TAB
+MARKER   DBSNP_ID
+WEIGHT   N
+ALLELE   ALT REF
+FREQ     AF
+EFFECT   BETA
+STDERR   SE
+PVAL     P
+CHROMOSOMELABEL CHROM
+POSITIONLABEL POS
+
+PROCESS data/GWAS/Elliott2018bv009.txt
+
+OUTFILE data/GWAS/andrews2019hcicvbv.metal .tbl
+ANALYZE
