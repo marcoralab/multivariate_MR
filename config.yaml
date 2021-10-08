@@ -1,0 +1,25 @@
+# snakemake --keep-going
+
+ExposureCode: ["Yengo2018bmi","Mahajan2018t2d"]
+OutcomeCode: ["covidhgi2020A2v6alleur", "covidhgi2020B2v6alleur", "covidhgi2020C2v6alleur"]
+
+mvexp1: ["Yengo2018bmi"]
+mvexp2: ["Mahajan2018t2d"]
+
+
+
+# ExposureCode: ["Andrews2019hcicvbv",  "Wood2014height"]
+# OutcomeCode: ["Kunkle2019load_stage123", "Andrews2019hcicvbv", "Wood2014height"]
+
+
+Pthreshold: ['5e-8']
+
+## Forbidden wildcard combinations
+missing: [
+   {"exposure" : "Yengo2018bmi", "outcome" : "covidhgi2020A2v6alleur", "pt" : "5e-8"},
+   {"exposure" : "Mahajan2018t2d", "outcome" : "covidhgi2020A2v6alleur", "pt" : "5e-8"},
+   {"exposure" : "Yengo2018bmi", "outcome" : "covidhgi2020B2v6alleur", "pt" : "5e-8"},
+   {"exposure" : "Mahajan2018t2d", "outcome" : "covidhgi2020B2v6alleur", "pt" : "5e-8"},
+   {"exposure" : "Yengo2018bmi", "outcome" : "covidhgi2020C2v6alleur", "pt" : "5e-8"},
+   {"exposure" : "Mahajan2018t2d", "outcome" : "covidhgi2020C2v6alleur", "pt" : "5e-8"},
+ ]
