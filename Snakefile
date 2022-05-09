@@ -54,9 +54,9 @@ rule ExposureSnps:
         ExposureClump = "../MRcovid/data/formated/{exposure}/{exposure}.clumped"
     output: out = "input/{exposure}/{exposure}_{pt}_SNPs.txt"
     params: Pthreshold = '{pt}'
-    conda: "envs/r.yaml"
+    conda: "workflow/envs/r.yaml"
     script:
-        'scripts/ExposureData.R'
+        'workflow/scripts/ExposureData.R'
 
 
 ## Extract exposure instruments from outcome gwas
@@ -67,9 +67,9 @@ rule OutcomeSnps:
     output:
         snps = "input/{exposure}/{outcome}/{exposure}_{pt}_{outcome}.SNPs.txt",
         missing = "input/{exposure}/{outcome}/{exposure}_{pt}_{outcome}.MissingSNPs.txt",
-    conda: "envs/r.yaml"
+    conda: "workflow/envs/r.yaml"
     script:
-        'scripts/OutcomeData.R'
+        'workflow/scripts/OutcomeData.R'
 
 
 ## Use plink to identify proxy snps instruments that were not avaliable in the outcome
@@ -101,9 +101,9 @@ rule ExtractProxySnps:
     output:
         proxies = "input/{exposure}/{outcome}/{exposure}_{pt}_{outcome}_ProxySNPs.txt",
         matched = "input/{exposure}/{outcome}/{exposure}_{pt}_{outcome}_MatchedProxys.csv",
-    conda: "envs/r.yaml"
+    conda: "workflow/envs/r.yaml"
     script:
-        'scripts/ExtractProxySNPs.R'
+        'workflow/scripts/ExtractProxySNPs.R'
 
 ## Use TwoSampleMR to harmonize exposure and outcome datasets
 rule Harmonize:
@@ -118,7 +118,7 @@ rule Harmonize:
         excposurecode = "{exposure}",
         outcomecode = "{outcome}"
     singularity: "docker://mrcieu/twosamplemr"
-    script: 'scripts/DataHarmonization.R'
+    script: 'workflow/scripts/DataHarmonization.R'
 
 rule radialMR:
     input:
@@ -130,7 +130,7 @@ rule radialMR:
         out = "input/{exposure}/{outcome}/{exposure}_{pt}_{outcome}"
     singularity: "docker://mrcieu/twosamplemr"
     script:
-        'scripts/Radial.R'
+        'workflow/scripts/Radial.R'
 
 ## Conduct MR analysis
 rule MR_analysis:
@@ -145,7 +145,7 @@ rule MR_analysis:
         out = "input/{exposure}/{outcome}/{exposure}_{pt}_{outcome}"
     singularity: "docker://mrcieu/twosamplemr"
     script:
-        'scripts/MR_analysis.R'
+        'workflow/scripts/MR_analysis.R'
 
 # Conduct MR analysis
 rule MVMR_SNPlist:
@@ -155,7 +155,7 @@ rule MVMR_SNPlist:
     output:
         out = "input/{mvexp1}/{mvout}/{mvexp1}_{mvexp2}_{pt}_{mvout}_CombinedSNPlist.txt",
     conda: "envs/r.yaml"
-    script: 'scripts/CombineMVMRExposures.R'
+    script: 'workflow/scripts/CombineMVMRExposures.R'
 
 rule MVMRclump:
     input:
@@ -189,7 +189,7 @@ rule MVMR:
         mvexp2 = '{mvexp2}',
         mvout = '{mvout}'
     singularity: "docker://mrcieu/twosamplemr"
-    script:'scripts/MVMR2.R'
+    script:'workflow/scripts/MVMR2.R'
 
 rule IVW_MVMR:
     input:
@@ -204,5 +204,5 @@ rule IVW_MVMR:
     params:
         bmi_snplists = 'input/{mvexp1}/{mvexp1}_5e-8_SNPs.txt',
         t2d_snplists = 'input/{mvexp2}/{mvexp2}_5e-8_SNPs.txt'
-    conda: "envs/r.yaml"
-    script:'scripts/MVMR_package.R'
+    conda: "workflow/envs/r.yaml"
+    script:'workflow/scripts/MVMR_IVW.R'
